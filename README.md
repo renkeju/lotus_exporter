@@ -1,5 +1,10 @@
 # Prometheus Lotus Metrics Exporter
 
+![Docker Image Version (latest by date)](https://img.shields.io/docker/v/renkeju/lotus_exporter)
+![Docker Pulls](https://img.shields.io/docker/pulls/renkeju/lotus_exporter)
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/renkeju/lotus_exporter)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/renkeju/lotus_exporter)
+
 Prometheus exporter for lotus-daemon and lotus-miner metrics.
 
 ## Building and running the exporter
@@ -17,7 +22,7 @@ python3 main.py \
     --miner_api http://127.0.0.1:2345/rpc/v0 \
     --miner_token xxxxxxx \
     --daemon_api http://127.0.0.1:1234/rpc/v0 \
-    --daemon_token xxxxxxx 
+    --daemon_token xxxxxxx \
     --port=9993
 ```
 
@@ -127,3 +132,4 @@ docker run -d \
 
 # Support
 
+![3a53f8cc-51c5-4ae0-b061-3075a11279da.png](https://storage.live.com/items/185FDE718F31F535!53570?authkey=31488497)
