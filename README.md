@@ -18,6 +18,7 @@ python3 main.py \
     --miner_token xxxxxxx \
     --daemon_api http://127.0.0.1:1234/rpc/v0 \
     --daemon_token xxxxxxx 
+    --port=9993
 ```
 
 Or use os environments value
@@ -27,6 +28,7 @@ export MINER_API=http://127.0.0.1:2345/rpc/v0
 export MINER_TOKEN=xxxxxxxx
 exoprt DAEMON_API=http://127.0.0.1:1234/rpc/v0
 export DAEMON_TOKEN=xxxxxxxxx
+export DEFAULT_PORT=9993
 python3 main.py
 ```
 
@@ -53,6 +55,7 @@ ExecStart=python3 main.py \
     --miner_token xxxxxxx \
     --daemon_api http://127.0.0.1:1234/rpc/v0 \
     --daemon_token xxxxxxx
+    --port 9993
 
 SyslogIdentifier=lotus_exporter
 Restart=always
@@ -98,6 +101,8 @@ docker run -d \
     -e MINER_TOKEN=xxxxxxxxx \
     -e DAEMON_API=http://127.0.0.1:1234/rpc/v0 \
     -e DAEMON_TOKEN=xxxxxxxxx \
+    -e DEFAULT_PORT=9993
+    -v /etc/localtime:/etc/localtime
     lotus_exporter:latest
 ```
 
@@ -117,8 +122,8 @@ docker run -d \
   - [x] Sectors Jobs
   - [x] Network
   - [x] Actor Control Wallet Balance
-  - [] Daels
-  - [] Daedlines
+  - [ ] Daels
+  - [ ] Daedlines
 
 # Support
 
