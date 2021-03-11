@@ -54,7 +54,7 @@ ExecStart=python3 main.py \
     --miner_api http://127.0.0.1:2345/rpc/v0 \
     --miner_token xxxxxxx \
     --daemon_api http://127.0.0.1:1234/rpc/v0 \
-    --daemon_token xxxxxxx
+    --daemon_token xxxxxxx \
     --port 9993
 
 SyslogIdentifier=lotus_exporter
@@ -101,8 +101,8 @@ docker run -d \
     -e MINER_TOKEN=xxxxxxxxx \
     -e DAEMON_API=http://127.0.0.1:1234/rpc/v0 \
     -e DAEMON_TOKEN=xxxxxxxxx \
-    -e DEFAULT_PORT=9993
-    -v /etc/localtime:/etc/localtime
+    -e DEFAULT_PORT=9993 \
+    -v /etc/localtime:/etc/localtime \
     lotus_exporter:latest
 ```
 
