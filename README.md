@@ -132,4 +132,4 @@ docker run -d \
 
 # Support
 
-![3a53f8cc-51c5-4ae0-b061-3075a11279da.png](https://storage.live.com/items/185FDE718F31F535!53570?authkey=31488497)
+![MoyMI Logo](https://raw.githubusercontent.com/renkeju/picture_share/main/moymi-log.png)
