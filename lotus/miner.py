@@ -164,8 +164,12 @@ class lotus_miner:
             for job in running_jobs['result'][worker]:
                 sector_number = job['Sector']['Number']
                 sector_task = job['Task']
-                sector_state = \
-                    self.WORKER_JOBS_RUNWAIT_STATE[str(job['RunWait'])]
+                if job['RunWait'] >= 1:
+                    sector_state = \
+                        self.WORKER_JOBS_RUNWAIT_STATE["1+"]
+                else:
+                    sector_state = \
+                        self.WORKER_JOBS_RUNWAIT_STATE[str(job['RunWait'])]
                 sector_start_time = time.mktime\
                     (time.strptime(job['Start'][:19], '%Y-%m-%dT%H:%M:%S'))
                 sector_from_worker = worker
