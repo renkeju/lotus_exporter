@@ -45,11 +45,7 @@ net_peers = Gauge(
     'Print peers',
     [
         "id",
-        "address",
-        "country_name",
-        "city_name",
-        "latitude",
-        "longitude"
+        "address"
     ]
 )
 
@@ -279,14 +275,9 @@ class lotus_daemon:
         for net_peer in net_peers_list['result']:
             net_peer_id = net_peer['ID']
             for index, net_address in enumerate(net_peer['Addrs']):
-                global_location = location.ip_location(net_address)
                 net_peers.labels(
                     id = net_peer_id,
-                    address = net_address,
-                    country_name = global_location['country_name'],
-                    city_name = global_location['city_name'],
-                    latitude = global_location['location_latitude'],
-                    longitude = global_location['location_longitude']
+                    address = net_address
                 ).set(index+1)
 
     def net_bandwidth(self):
@@ -381,15 +372,16 @@ class lotus_daemon:
             address = self.__account_key(worker_id),
             use = "other"
         ).set(int(self.__wallet_balance(self.__account_key(worker_id))) / 1e18)
-        for index, control_id in enumerate(control_ids):
-            actor_control_list.labels(
-                miner_id = miner_id,
-                name = "control-{index}".format(index=index),
-                id = control_id,
-                address = self.__account_key(control_id),
-                use = self.ACTOR_CONTROL_USE_TYPE[index]
-            ).set(int(self.__wallet_balance(self.__account_key(control_id))) \
-                / 1e18)
+        if control_ids is not None:
+            for index, control_id in enumerate(control_ids):
+                actor_control_list.labels(
+                    miner_id = miner_id,
+                    name = "control-{index}".format(index=index),
+                    id = control_id,
+                    address = self.__account_key(control_id),
+                    use = self.ACTOR_CONTROL_USE_TYPE[index]
+                ).set(int(self.__wallet_balance(self.__account_key(control_id))) \
+                    / 1e18)
 
     def chain_height(self):
         net_chain_height = self.__chain_height()['Height']

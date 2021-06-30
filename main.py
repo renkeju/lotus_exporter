@@ -6,81 +6,73 @@ __author__ = 'RenKeju'
 import os
 import time
 import argparse
+from typing import Protocol
 
 from prometheus_client import start_http_server
 from lotus.daemon import lotus_daemon
 from lotus.miner import lotus_miner
 
 
-__MINER_API = os.getenv('MINER_API', 'null')
-__MINER_TOKEN = os.getenv('MINER_TOKEN', 'null')
-__DAEMON_API = os.getenv('DAEMON_API', 'null')
-__DAEMON_TOKEN = os.getenv('DAEMON_TOKEN', 'null')
-__DEFAULT_PORT = os.getenv('DEFAULT_PORT', 'null')
+__FULLNODE_API_INFO = os.getenv('FULLNODE_API_INFO', 'null')
+__MINER_API_INFO = os.getenv('MINER_API_INFO', 'null')
 
 parser = argparse.ArgumentParser(description='Lotus exporter')
 
-if __MINER_API == 'null':
+if __FULLNODE_API_INFO == 'null':
     parser.add_argument(
-        '--miner_api',
-        help = 'Lotus Miner HTTP RPC-API endpoint\
-            (default: "http://127.0.0.1:2345/rpc/v0")',
-        default="http://127.0.0.1:2345/rpc/v0",
+        '--fullnode_api_info',
+        help = 'Set token with API info required to connect to lotus fullnode',
         required=True
-        )
-
-if __MINER_TOKEN == 'null':
-    parser.add_argument(
-        '--miner_token',
-        help='Lotus Miner authorization token',
-        required=True
-        )
-
-if __DAEMON_API == 'null':
-    parser.add_argument(
-        '--daemon_api',
-        help='Lotus Miner HTTP RPC-API endpoint\
-            (default: "http://127.0.0.1:1234/rpc/v0")',
-        default="http://127.0.0.1:1234/rpc/v0",
-        required=True
-        )
-
-if __DAEMON_TOKEN == 'null':
-    parser.add_argument(
-        '--daemon_token',
-        help='Lotus Miner authorization token',
-        required=True
-        )
-
-if __DEFAULT_PORT == 'null':
-    parser.add_argument(
-        '--port',
-        help='Lotus Exporter export port(default: 9993)',
-        default=9993
     )
+
+if __MINER_API_INFO == 'null':
+    parser.add_argument(
+        '--miner_api_info',
+        help = 'Set token with API info required to connect to lotus miner',
+        required=True
+    )
+
+parser.add_argument(
+    '--port',
+    help = 'Lotus Exporter export port(default: 9993)',
+    default=9993
+)
+
+parser.add_argument(
+    '--addr',
+    help = 'Lotus Exporter export address(default: 127.0.0.1)',
+    default='127.0.0.1'
+)
 
 args = parser.parse_args()
 
-if __MINER_API == 'null':
-    __MINER_API = args.miner_api
+if __FULLNODE_API_INFO == 'null':
+    __FULLNODE_API_INFO = args.fullnode_api_info
 
-if __MINER_TOKEN == 'null':
-    __MINER_TOKEN = args.miner_token
+if __MINER_API_INFO == 'null':
+    __MINER_API_INFO = args.miner_api_info
 
-if __DAEMON_API == 'null':
-    __DAEMON_API = args.daemon_api
-
-if __DAEMON_TOKEN == 'null':
-    __DAEMON_TOKEN = args.daemon_token
-
-if __DEFAULT_PORT == 'null':
-    __DEFAULT_PORT = args.port
-
+__DEFAULT_PORT = args.port
+__DEFAULT_ADDR = args.addr
+__FULLNODE_API_INFO_LIST = __FULLNODE_API_INFO.split(':')
+__MINER_API_INFO_LIST = __MINER_API_INFO.split(':')
+__MINER_API = '{protocol}://{ip_address}:{port}/rpc/v0'.format(
+    protocol = __MINER_API_INFO_LIST[1].split('/')[5],
+    ip_address = __MINER_API_INFO_LIST[1].split('/')[2],
+    port = __MINER_API_INFO_LIST[1].split('/')[4]
+)
+__MINER_TOKEN = __MINER_API_INFO_LIST[0]
+__FULLNODE_API = '{protocol}://{ip_address}:{port}/rpc/v0'.format(
+    protocol = __FULLNODE_API_INFO_LIST[1].split('/')[5],
+    ip_address = __FULLNODE_API_INFO_LIST[1].split('/')[2],
+    port = __FULLNODE_API_INFO_LIST[1].split('/')[4]
+)
+__FULLNODE_TOKEN = __FULLNODE_API_INFO_LIST[0]
 
 if __name__ == "__main__":
-    start_http_server(__DEFAULT_PORT)
+    start_http_server(int(__DEFAULT_PORT), addr=__DEFAULT_ADDR)
     lotus_miner = lotus_miner(api=__MINER_API, token=__MINER_TOKEN)
-    lotus_daemon = lotus_daemon(api=__DAEMON_API, token=__DAEMON_TOKEN)
+    lotus_daemon = lotus_daemon(api=__FULLNODE_API, token=__FULLNODE_TOKEN)
     miner_id = lotus_miner.miner_id()
     
     while True:

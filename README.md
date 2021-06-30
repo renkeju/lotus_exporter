@@ -16,25 +16,20 @@ git clone https://github.com/renkeju/lotus_exporter.git
 cd lotus_exporter
 ```
 
-use command arguments
+Get lotus environment variables
 ```
-python3 main.py \
-    --miner_api http://127.0.0.1:2345/rpc/v0 \
-    --miner_token xxxxxxx \
-    --daemon_api http://127.0.0.1:1234/rpc/v0 \
-    --daemon_token xxxxxxx \
-    --port=9993
+lotus auth-info --perm admin
+FULLNODE_API_INFO=asdfghjklqwertyuiopzxcvbnmdqdwewfvde.hlawbdhajkhjksdjhbhchjajdbjbdkjahcvajbajkdlkjLkhkljwhcl.qghjhjbkjvhuiujoi2bf2ufjdnfbajjkhkjkjbcnali:/ip4/127.0.0.1/tcp/1234/http
+lotus-miner auth-info --perm admin
+MINER_API_INFO=REYTUIBKY78hqckjdkbadsiwbkasvbafodiv.khq2hkjdhqbdhjqyhlufh89jk23njjhbfvHglwlvwjcakjcbiuvjkh2.kjwfbqebfvjh923brj2jef9rkkcjvjevkjoiekjfvnf:/ip4/127.0.0.1/tcp/2345/http
 ```
 
-Or use os environments value
+use os environments variables
 
 ```
-export MINER_API=http://127.0.0.1:2345/rpc/v0
-export MINER_TOKEN=xxxxxxxx
-exoprt DAEMON_API=http://127.0.0.1:1234/rpc/v0
-export DAEMON_TOKEN=xxxxxxxxx
-export DEFAULT_PORT=9993
-python3 main.py
+export FULLNODE_API_INFO=asdfghjklqwertyuiopzxcvbnmdqdwewfvde.hlawbdhajkhjksdjhbhchjajdbjbdkjahcvajbajkdlkjLkhkljwhcl.qghjhjbkjvhuiujoi2bf2ufjdnfbajjkhkjkjbcnali:/ip4/127.0.0.1/tcp/1234/http
+export MINER_API_INFO=REYTUIBKY78hqckjdkbadsiwbkasvbafodiv.khq2hkjdhqbdhjqyhlufh89jk23njjhbfvHglwlvwjcakjcbiuvjkh2.kjwfbqebfvjh923brj2jef9rkkcjvjevkjoiekjfvnf:/ip4/127.0.0.1/tcp/2345/http
+python3 main.py --port=9993 --addr=127.0.0.1
 ```
 
 If there is no error in executing the command locally, you can use the systemd management service.
@@ -52,19 +47,19 @@ Description=Prometheus Lotus Exporter
 After=network-online.target
 
 [Service]
+WorkingDirectory=/opt/lotus_exporter
+
+Environment=FULLNODE_API_INFO=asdfghjklqwertyuiopzxcvbnmdqdwewfvde.hlawbdhajkhjksdjhbhchjajdbjbdkjahcvajbajkdlkjLkhkljwhcl.qghjhjbkjvhuiujoi2bf2ufjdnfbajjkhkjkjbcnali:/ip4/127.0.0.1/tcp/1234/http
+Environment=MINER_API_INFO=REYTUIBKY78hqckjdkbadsiwbkasvbafodiv.khq2hkjdhqbdhjqyhlufh89jk23njjhbfvHglwlvwjcakjcbiuvjkh2.kjwfbqebfvjh923brj2jef9rkkcjvjevkjoiekjfvnf:/ip4/127.0.0.1/tcp/2345/http
+
 Type=simple
-User=node-exp
-Group=node-exp
-ExecStart=python3 main.py \
-    --miner_api http://127.0.0.1:2345/rpc/v0 \
-    --miner_token xxxxxxx \
-    --daemon_api http://127.0.0.1:1234/rpc/v0 \
-    --daemon_token xxxxxxx \
-    --port 9993
+User=lotus-exp
+Group=lotus-exp
+ExecStart=python3 main.py --port 9993 --addr 127.0.0.1
 
 SyslogIdentifier=lotus_exporter
 Restart=always
-RestartSec=1
+RestartSec=1800
 StartLimitInterval=0
 
 ProtectHome=yes
@@ -77,8 +72,9 @@ ProtectControlGroups=true
 Create a system user and a system group for lotus_exporter.service
 
 ```
-groupadd -r node-exp
-useradd -r -M -U node-exp node-exp 
+groupadd -r lotus-exp
+useradd -r -M -g lotus-exp lotus-exp
+chown lotus-exp.lotus-exp -R /opt/lotus_exporter
 ```
 
 Start service
@@ -102,11 +98,10 @@ Run Docker
 docker run -d \
     --network=host \
     --rm \
-    -e MINER_API=http://127.0.0.1:2345/rpc/v0 \
-    -e MINER_TOKEN=xxxxxxxxx \
-    -e DAEMON_API=http://127.0.0.1:1234/rpc/v0 \
-    -e DAEMON_TOKEN=xxxxxxxxx \
+    -e MINER_API_INFO=REYTUIBKY78hqckjdkbadsiwbkasvbafodiv.khq2hkjdhqbdhjqyhlufh89jk23njjhbfvHglwlvwjcakjcbiuvjkh2.kjwfbqebfvjh923brj2jef9rkkcjvjevkjoiekjfvnf:/ip4/127.0.0.1/tcp/2345/http \
+    -e FULLNODE_API_INFO=asdfghjklqwertyuiopzxcvbnmdqdwewfvde.hlawbdhajkhjksdjhbhchjajdbjbdkjahcvajbajkdlkjLkhkljwhcl.qghjhjbkjvhuiujoi2bf2ufjdnfbajjkhkjkjbcnali:/ip4/127.0.0.1/tcp/1234/http \
     -e DEFAULT_PORT=9993 \
+    -e DEFAULT_ADDR=127.0.0.1 \
     -v /etc/localtime:/etc/localtime \
     lotus_exporter:latest
 ```
@@ -123,7 +118,7 @@ docker run -d \
   - [x] Local Message Pool Pending
 * miner
   - [x] Wallet Balance
-  - [x] Power & Sectors States
+  - [x] Power & Sectors States(Off by default)
   - [x] Sectors Jobs
   - [x] Network
   - [x] Actor Control Wallet Balance

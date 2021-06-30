@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from os import getenv
 import time
 import json
 from . import location
@@ -41,11 +42,7 @@ net_peers = Gauge(
     [
         "miner_id",
         "id",
-        "address",
-        "country_name",
-        "city_name",
-        "latitude",
-        "longitude"
+        "address"
     ]
 )
 
@@ -139,9 +136,9 @@ class lotus_miner:
         self.api = api
         self.token = token
 
-        with open('.sector_states.tmp.json', 'w') as json_file_handler:
-            json_file_handler.\
-                write(json.dumps(self.SECTORS_STATES_DICT, indent = 4))
+        # with open('.sector_states.tmp.json', 'w') as json_file_handler:
+        #     json_file_handler.\
+        #         write(json.dumps(self.SECTORS_STATES_DICT, indent = 4))
 
     def miner_id(self):
         actor_address = get_json(self.api, self.token, "ActorAddress", [])
@@ -193,15 +190,10 @@ class lotus_miner:
         for net_peer in net_peers_list['result']:
             net_peer_id = net_peer['ID']
             for index, net_address in enumerate(net_peer['Addrs']):
-                global_location = location.ip_location(net_address)
                 net_peers.labels(
                     miner_id = self.miner_id(),
                     id = net_peer_id,
-                    address = net_address,
-                    country_name = global_location['country_name'],
-                    city_name = global_location['city_name'],
-                    latitude = global_location['location_latitude'],
-                    longitude = global_location['location_longitude']
+                    address = net_address
                 ).set(index+1)
 
     def net_bandwidth(self):
@@ -279,7 +271,7 @@ class lotus_miner:
     #         get_json(self.api, self.token, "StateMarketDeals", [[]])
 
     def run(self):
-        self.sectors_list_states(30)
+        # self.sectors_list_states(30)
         self.version()
         self.list_running_jobs()
         self.net_peers_list()
