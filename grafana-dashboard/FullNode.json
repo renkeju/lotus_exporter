@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1625046160703,
+  "iteration": 1625048185782,
   "links": [],
   "panels": [
     {
@@ -1379,7 +1379,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "gateway.computer.sip.lan:9993",
           "value": "gateway.computer.sip.lan:9993"
         },
@@ -1407,11 +1407,11 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "1.10.0+calibnet+git.764fa9dae.dirty",
-          "value": "1.10.0+calibnet+git.764fa9dae.dirty"
+          "text": "1.8.0+mainnet+git.5c56017db",
+          "value": "1.8.0+mainnet+git.5c56017db"
         },
         "datasource": "Prometheus",
-        "definition": "label_values(lotus_daemon_version, version)",
+        "definition": "label_values(lotus_daemon_version{instance=\"$instance\"}, version)",
         "description": null,
         "error": null,
         "hide": 1,
@@ -1421,7 +1421,7 @@
         "name": "Version",
         "options": [],
         "query": {
-          "query": "label_values(lotus_daemon_version, version)",
+          "query": "label_values(lotus_daemon_version{instance=\"$instance\"}, version)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1453,5 +1453,5 @@
   "timezone": "browser",
   "title": "FullNode",
   "uid": "ZclGUAknz",
-  "version": 11
+  "version": 12
 }

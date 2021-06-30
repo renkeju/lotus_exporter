@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1625046666596,
+  "iteration": 1625048637154,
   "links": [
     {
       "icon": "external link",
@@ -1751,11 +1751,11 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "1.10.0+calibnet+git.764fa9dae",
-          "value": "1.10.0+calibnet+git.764fa9dae"
+          "text": "1.8.0+mainnet+git.5c56017db",
+          "value": "1.8.0+mainnet+git.5c56017db"
         },
         "datasource": "Prometheus",
-        "definition": "label_values(lotus_miner_version, version)",
+        "definition": "label_values(lotus_miner_version{miner_id=\"$miner_id\"}, version)",
         "description": null,
         "error": null,
         "hide": 1,
@@ -1765,7 +1765,7 @@
         "name": "Version",
         "options": [],
         "query": {
-          "query": "label_values(lotus_miner_version, version)",
+          "query": "label_values(lotus_miner_version{miner_id=\"$miner_id\"}, version)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1817,5 +1817,5 @@
   "timezone": "",
   "title": "Miner",
   "uid": "9Xn-sAz7z",
-  "version": 5
+  "version": 6
 }

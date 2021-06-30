@@ -7,6 +7,11 @@
 
 Prometheus exporter for lotus-daemon and lotus-miner metrics.
 
+![grafana Miner dashboard](images/Miner - Grafana.png)
+
+![grafana FullNode dashboard](images/images/FullNode - Grafa.png)
+
+
 ## Building and running the exporter
 
 ### Run locally
