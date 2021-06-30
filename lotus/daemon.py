@@ -3,7 +3,6 @@
 
 import time
 from request import get_json
-from . import location
 from prometheus_client import Gauge
 
 
@@ -259,7 +258,7 @@ class lotus_daemon:
                 is_default = is_default,
                 nonce = mpool_get_nonce['result'],
                 id_address = state_lookup_id['result']
-            ).set(int(wallet_balance["result"])/1e18)
+            ).set(int(wallet_balance["result"])/1e9)
             
     def net_scores(self):
         net_pubsub_scores._metrics.clear()
@@ -364,14 +363,14 @@ class lotus_daemon:
             id = owner_id,
             address = self.__account_key(owner_id),
             use = "other"
-        ).set(int(self.__wallet_balance(self.__account_key(owner_id))) / 1e18)
+        ).set(int(self.__wallet_balance(self.__account_key(owner_id))) / 1e9)
         actor_control_list.labels(
             miner_id = miner_id,
             name = "worker",
             id = worker_id,
             address = self.__account_key(worker_id),
             use = "other"
-        ).set(int(self.__wallet_balance(self.__account_key(worker_id))) / 1e18)
+        ).set(int(self.__wallet_balance(self.__account_key(worker_id))) / 1e9)
         if control_ids is not None:
             for index, control_id in enumerate(control_ids):
                 actor_control_list.labels(
@@ -381,7 +380,7 @@ class lotus_daemon:
                     address = self.__account_key(control_id),
                     use = self.ACTOR_CONTROL_USE_TYPE[index]
                 ).set(int(self.__wallet_balance(self.__account_key(control_id))) \
-                    / 1e18)
+                    / 1e9)
 
     def chain_height(self):
         net_chain_height = self.__chain_height()['Height']
@@ -406,23 +405,23 @@ class lotus_daemon:
                 int(read_owner_miner_state['State']['PreCommitDeposits']) + \
                 int(read_owner_miner_state['State']['InitialPledge']) + \
                 int(read_owner_miner_state['State']['LockedFunds'])
-            )) / 1e18
+            )) / 1e9
         miner_balance.labels(
             miner_id = miner_id,
             state = 'Balance'
-        ).set(int(read_owner_miner_state['Balance']) / 1e18)
+        ).set(int(read_owner_miner_state['Balance']) / 1e9)
         miner_balance.labels(
             miner_id = miner_id,
             state = 'PreCommit'
-        ).set(int(read_owner_miner_state['State']['PreCommitDeposits']) / 1e18)
+        ).set(int(read_owner_miner_state['State']['PreCommitDeposits']) / 1e9)
         miner_balance.labels(
             miner_id = miner_id,
             state = 'Pledge'
-        ).set(int(read_owner_miner_state['State']['InitialPledge']) / 1e18)
+        ).set(int(read_owner_miner_state['State']['InitialPledge']) / 1e9)
         miner_balance.labels(
             miner_id = miner_id,
             state = 'Vesting'
-        ).set(int(read_owner_miner_state['State']['LockedFunds']) /1e18)
+        ).set(int(read_owner_miner_state['State']['LockedFunds']) /1e9)
         miner_balance.labels(
             miner_id = miner_id,
             state = 'Available'
@@ -438,16 +437,16 @@ class lotus_daemon:
         market_balance.labels(
             miner_id = miner_id,
             state = "Balance"
-        ).set(int(state_market_balance['result']['Escrow']) / 1e18)
+        ).set(int(state_market_balance['result']['Escrow']) / 1e9)
         market_balance.labels(
             miner_id = miner_id,
             state = "Locked"
-        ).set(int(state_market_balance['result']['Locked']) / 1e18)
+        ).set(int(state_market_balance['result']['Locked']) / 1e9)
         market_balance.labels(
             miner_id = miner_id,
             state = "Available"
         ).set((int(state_market_balance['result']['Escrow']) \
-            - int(state_market_balance['result']['Locked'])) / 1e18)
+            - int(state_market_balance['result']['Locked'])) / 1e9)
 
     def state_miner_power(self, miner_id):
         miner_power = get_json(

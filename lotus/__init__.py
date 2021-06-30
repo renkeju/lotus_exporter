@@ -1,4 +1,4 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from . import miner, daemon, location
+from . import miner, daemon

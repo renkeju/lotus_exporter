@@ -4,7 +4,6 @@
 from os import getenv
 import time
 import json
-from . import location
 from request import get_json
 from prometheus_client import Gauge
 
