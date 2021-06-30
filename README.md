@@ -18,9 +18,9 @@ cd lotus_exporter
 
 Get lotus environment variables
 ```
-lotus auth-info --perm admin
+lotus auth api-info --perm admin
 FULLNODE_API_INFO=asdfghjklqwertyuiopzxcvbnmdqdwewfvde.hlawbdhajkhjksdjhbhchjajdbjbdkjahcvajbajkdlkjLkhkljwhcl.qghjhjbkjvhuiujoi2bf2ufjdnfbajjkhkjkjbcnali:/ip4/127.0.0.1/tcp/1234/http
-lotus-miner auth-info --perm admin
+lotus-miner auth api-info --perm admin
 MINER_API_INFO=REYTUIBKY78hqckjdkbadsiwbkasvbafodiv.khq2hkjdhqbdhjqyhlufh89jk23njjhbfvHglwlvwjcakjcbiuvjkh2.kjwfbqebfvjh923brj2jef9rkkcjvjevkjoiekjfvnf:/ip4/127.0.0.1/tcp/2345/http
 ```
 
@@ -55,7 +55,7 @@ Environment=MINER_API_INFO=REYTUIBKY78hqckjdkbadsiwbkasvbafodiv.khq2hkjdhqbdhjqy
 Type=simple
 User=lotus-exp
 Group=lotus-exp
-ExecStart=python3 main.py --port 9993 --addr 127.0.0.1
+ExecStart=/usr/bin/python3 main.py --port 9993 --addr 127.0.0.1
 
 SyslogIdentifier=lotus_exporter
 Restart=always
@@ -75,6 +75,8 @@ Create a system user and a system group for lotus_exporter.service
 groupadd -r lotus-exp
 useradd -r -M -g lotus-exp lotus-exp
 chown lotus-exp.lotus-exp -R /opt/lotus_exporter
+apt -y install python3-pip
+pip3 install -r /opt/lotus_exporter/requirements.txt
 ```
 
 Start service

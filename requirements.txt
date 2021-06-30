@@ -1,3 +1,1 @@
 prometheus-client>=0.9.0
-geoip2>=4.1.0
-netaddr>=0.8.0
