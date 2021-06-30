@@ -266,10 +266,6 @@ class lotus_miner:
                 state = key
             ).set(int(value))
 
-    # def storage_deals_list(self):
-    #     state_marker_deals = \
-    #         get_json(self.api, self.token, "StateMarketDeals", [[]])
-
     def run(self):
         # self.sectors_list_states(30)
         self.version()
