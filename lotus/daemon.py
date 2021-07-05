@@ -481,4 +481,4 @@ class lotus_daemon:
         self.net_bandwidth()
         self.chain_height()
         self.basefee()
-        self.mpool_pending(local=True)
+        # self.mpool_pending(local=True)
