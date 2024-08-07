@@ -131,7 +131,3 @@ docker run -d \
   - [x] Actor Control Wallet Balance
   - [ ] Daels
   - [ ] Daedlines
-
-# Support
-
-![MoyMI Logo](https://raw.githubusercontent.com/renkeju/picture_share/main/moymi-log.png)
